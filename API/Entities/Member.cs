@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 using SQLitePCL;
 
 namespace API.Entities;
@@ -17,6 +18,7 @@ public class Member
     public required string Country { get; set; }
 
     // Navigation Property
+    [JsonIgnore]
     public List<Photo> Photos { get; set; } = [];
 
     [ForeignKey(nameof(Id))]
