@@ -20,7 +20,7 @@ public class Member
     // Navigation Property
     [JsonIgnore]
     public List<Photo> Photos { get; set; } = [];
-
+    [JsonIgnore]
     [ForeignKey(nameof(Id))]
     public AppUser User { get; set; } = null!;
 }
