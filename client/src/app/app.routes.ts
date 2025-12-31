@@ -1,5 +1,4 @@
 import { Routes } from '@angular/router';
-import { combineLatest } from 'rxjs';
 import { Home } from '../features/home/home';
 import { MemberList } from '../features/members/member-list/member-list';
 import { MemberDetail } from '../features/members/member-detail/member-detail';
@@ -12,7 +11,6 @@ import { ServerError } from '../shared/errors/server-error/server-error';
 import { MemberProfile } from '../features/members/member-profile/member-profile';
 import { MemberPhotos } from '../features/members/member-photos/member-photos';
 import { MemberMessages } from '../features/members/member-messages/member-messages';
-import { Component } from '@angular/core';
 import { memberResolver } from '../features/members/member-resolver';
 
 export const routes: Routes = [

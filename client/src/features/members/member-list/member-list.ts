@@ -18,5 +18,5 @@ export class MemberList {
   constructor() {
     this.members$ = this.memberService.getMembers();
   }
-  
+
 }

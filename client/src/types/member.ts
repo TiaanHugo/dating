@@ -1,7 +1,7 @@
 export type Member = {
     id: string
     dateOfBirth: string
-    imageUrl: string
+    imageUrl?: string
     displayName: string
     created: string
     lastActive: string
@@ -16,4 +16,13 @@ export type Photo = {
     url: string
     publicId?: any
     memberId: string
+}
+
+export type Message = {
+    id: number
+    senderId: string
+    senderDisplayName: string
+    senderImageUrl: string
+    content: string
+    recipientId: string
 }

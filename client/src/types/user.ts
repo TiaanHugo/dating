@@ -16,3 +16,8 @@ export type RegisterCreds = {
     displayName: string;
     password: string;
 }
+
+export type UserLike = {
+    likedId: string;
+    likerId: string;
+}

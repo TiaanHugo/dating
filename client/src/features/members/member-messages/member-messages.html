@@ -1,1 +1,9 @@
-<p>member-messages works!</p>
+@if (messages$ | async; as messages) {
+<ul>
+    @for (msg of messages; track msg.id) {
+    <li>{{ msg.content }} <span class="text-red-500">from</span> {{msg.senderDisplayName}}</li>
+    }
+</ul>
+} @else {
+<p>No messages found.</p>
+}

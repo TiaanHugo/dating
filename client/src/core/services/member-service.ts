@@ -1,9 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { Member } from '../../types/member';
+import { Member, Message, Photo } from '../../types/member';
 import { Observable } from 'rxjs';
 import { AccountService } from './account-service';
+import { UserLike } from '../../types/user';
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +22,11 @@ export class MemberService {
     return this.http.get<Member>(this.baseUrl + 'members/' + id);
   }
 
-  addLike(username: string) {
-    return this.http.post(this.baseUrl + 'likes/' + username, {});
+  getMemberPhotos(id: string) {
+    return this.http.get<Photo[]>(this.baseUrl + 'members/' + id + '/photos');
+  }
+
+  getMessages(id: string) {
+    return this.http.get<Message[]>(this.baseUrl + 'messages/' + id);
   }
 }
