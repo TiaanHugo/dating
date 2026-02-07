@@ -26,3 +26,10 @@ export type Message = {
     content: string
     recipientId: string
 }
+
+export type EditableMember = {
+    displayName?: string
+    city?: string
+    country?: string
+    description?: string
+}

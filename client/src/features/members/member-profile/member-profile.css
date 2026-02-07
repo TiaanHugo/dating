@@ -1,0 +1,7 @@
+textarea {
+  width: 100%;
+  box-sizing: border-box;
+  resize: vertical;       /* optional */
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
+}

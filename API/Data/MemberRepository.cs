@@ -32,6 +32,10 @@ public class MemberRepository(AppDbContext context) : IMemberRepository
 
     public void Update(Member member)
     {
-        context.Entry(member).State = EntityState.Modified;
+        var memberToUpdate = context.Members.FindAsync(member.Id);
+        if (memberToUpdate != null)
+        {
+            context.Entry(memberToUpdate).CurrentValues.SetValues(member);
+        }
     }
 }

@@ -14,7 +14,7 @@
                 </svg>
 
                 <h3 [routerLink]="'/'"
-                    class="text-2xl font-semibold uppercase">Hola</h3>
+                    class="text-2xl font-semibold uppercase">AWEMSK</h3>
             </a>
         </div>
 
@@ -49,7 +49,7 @@
                     <span class="mt-1">{{selectedTheme()}}</span>
                 </button>
                 <ul tabindex="1"
-                    class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
+                    class="dropdown-content menu bg-base-100 rounded-box z-50 w-52 p-2 shadow-sm">
                     @for (theme of themes; track $index) {
                     <li><a (click)="handleSelectTheme(theme)">{{theme}}</a></li>
                     }
@@ -85,7 +85,9 @@
                 </div>
                 <ul tabindex="-1"
                     class="dropdown-content dropdown-end menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
-                    <li><a>My Profile</a></li>
+                    <li>
+                        <routerlink routerLink="/members/{{user.id}}">Edit Profile</routerlink>
+                    </li>
                     <li><a (click)="logout()">Logout</a></li>
                 </ul>
             </div>

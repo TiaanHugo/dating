@@ -36,5 +36,23 @@ namespace API.Controllers
             }
             return NotFound();
         }
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult> UpdateMember(string id, Member dto)
+        {
+            var member = await memberRepository.GetMemberByIdAsync(id);
+            if (member == null) return NotFound();
+
+            member.City = dto.City;
+            member.Country = dto.Country;
+            member.Description = dto.Description;
+
+            memberRepository.Update(member);
+
+            return await memberRepository.SaveAllAsync()
+                ? NoContent()
+                : BadRequest("Failed to update member");
+        }
+
     }
 }

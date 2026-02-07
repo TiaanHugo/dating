@@ -1,8 +1,10 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { Member } from '../../../types/member';
 import { filter } from 'rxjs';
 import { AgePipe } from "../../../pipes/age-pipe";
+import { AccountService } from '../../../core/services/account-service';
+import { MemberService } from '../../../core/services/member-service';
 
 @Component({
   standalone: true,
@@ -13,10 +15,16 @@ import { AgePipe } from "../../../pipes/age-pipe";
 })
 export class MemberDetail implements OnInit {
   private route = inject(ActivatedRoute);
+  protected memberService = inject(MemberService);
+  private accountService = inject(AccountService);
   private router = inject(Router);
   // Initializing to null is a good practice for observables
   protected member = signal<Member | undefined>(undefined);
   protected title = signal<string | undefined>('Profile');
+  protected isCurrentUser = computed(() => {
+    return this.accountService.currentUser()?.id === this.route.snapshot.paramMap.get('id');
+  });
+
   ngOnInit(): void {
     // Use ngOnInit for initialization logic
     this.route.data.subscribe({
