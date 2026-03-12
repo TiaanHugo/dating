@@ -1,5 +1,8 @@
+using System.Security.Claims;
 using API.Data;
+using API.DTOs;
 using API.Entities;
+using API.Extensions;
 using API.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -37,21 +40,25 @@ namespace API.Controllers
             return NotFound();
         }
 
-        [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateMember(string id, Member dto)
+        [HttpPut]
+        public async Task<ActionResult> UpdateMember(MemberUpdateDto memberUpdateDto)
         {
-            var member = await memberRepository.GetMemberByIdAsync(id);
-            if (member == null) return NotFound();
+            var memberId = User.GetMemberId();
+            if (memberId == null) return BadRequest("Oops - no id found in token");
 
-            member.City = dto.City;
-            member.Country = dto.Country;
-            member.Description = dto.Description;
+            var member = await memberRepository.GetMemberForUpdateAsync(memberId);
+            if (member == null) return BadRequest("Member not found");
 
-            memberRepository.Update(member);
+            member.DisplayName = memberUpdateDto.DisplayName ?? member.DisplayName;
+            member.Description = memberUpdateDto.Description ?? member.Description;
+            member.City = memberUpdateDto.City ?? member.City;
+            member.Country = memberUpdateDto.Country ?? member.Country;
 
-            return await memberRepository.SaveAllAsync()
-                ? NoContent()
-                : BadRequest("Failed to update member");
+            member.User.DisplayName = memberUpdateDto.DisplayName ?? member.User.DisplayName;
+
+            if (await memberRepository.SaveAllAsync()) return NoContent();
+
+            return BadRequest("Failed to update member");
         }
 
     }

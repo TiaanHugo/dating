@@ -1,9 +1,9 @@
 import {
   Component,
+  HostListener,
   inject,
   OnDestroy,
   OnInit,
-  signal,
   ViewChild,
 } from '@angular/core';
 import { DatePipe } from '@angular/common';
@@ -12,6 +12,7 @@ import { MemberService } from '../../../core/services/member-service';
 import { ActivatedRoute } from '@angular/router';
 import { EditableMember, Member } from '../../../types/member';
 import { ToastService } from '../../../core/services/toast-service';
+import { AccountService } from '../../../core/services/account-service';
 
 @Component({
   selector: 'app-member-profile',
@@ -21,11 +22,15 @@ import { ToastService } from '../../../core/services/toast-service';
   styleUrl: './member-profile.css'
 })
 export class MemberProfile implements OnInit, OnDestroy {
-  @ViewChild('editForm') editForm: NgForm | undefined;
+  @ViewChild('editForm') editForm?: NgForm;
+  @HostListener('window:beforeunload', ['$event']) notifyUser($event: BeforeUnloadEvent) {
+    if (this.editForm?.dirty) {
+      $event.preventDefault();
+    }
+  }
+  private accountService = inject(AccountService);
   protected memberService = inject(MemberService);
   private toastService = inject(ToastService);
-  private route = inject(ActivatedRoute);
-  protected member = signal<Member | undefined>(undefined);
   protected editableMember: EditableMember = {
     displayName: '',
     city: '',
@@ -35,14 +40,11 @@ export class MemberProfile implements OnInit, OnDestroy {
 
 
   ngOnInit(): void {
-    this.route.parent?.data.subscribe(data => {
-      this.member.set(data['member']);
-    })
     this.editableMember = {
-      displayName: this.member()?.displayName || '',
-      city: this.member()?.city || '',
-      country: this.member()?.country || '',
-      description: this.member()?.description || ''
+      displayName: this.memberService.member()?.displayName || '',
+      city: this.memberService.member()?.city || '',
+      country: this.memberService.member()?.country || '',
+      description: this.memberService.member()?.description || ''
     }
   }
 
@@ -53,11 +55,23 @@ export class MemberProfile implements OnInit, OnDestroy {
   }
 
   updateProfile() {
-    if (!this.member() || !this.editableMember) return;
-    const updatedMember = { ...this.member(), ...this.editableMember };
-    console.log(updatedMember);
-    this.toastService.success('Profile updated successfully');
-    this.memberService.editMode.set(false);
+    if (!this.memberService.member()) return;
+    const updatedMember = { ...this.memberService.member(), ...this.editableMember };
+    this.memberService.updateMember(this.editableMember).subscribe({
+      next: () => {
+        const currentUser = this.accountService.currentUser();
+        if(currentUser && typeof updatedMember.displayName === 'string' && updatedMember.displayName !== currentUser?.displayName) {
+          currentUser.displayName = updatedMember.displayName;
+          this.accountService.setCurrentUser(currentUser);
+        }
+        this.toastService.success('Profile updated successfully');
+        this.memberService.editMode.set(false);
+        this.memberService.member.set(updatedMember as Member);
+        this.editForm?.reset(updatedMember);
+      }
+    }
+    )
+
   }
 
 }
