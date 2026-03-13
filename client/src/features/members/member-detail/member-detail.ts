@@ -1,6 +1,5 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
-import { Member } from '../../../types/member';
 import { filter } from 'rxjs';
 import { AgePipe } from "../../../pipes/age-pipe";
 import { AccountService } from '../../../core/services/account-service';

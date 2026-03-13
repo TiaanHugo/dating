@@ -3,14 +3,12 @@ import { inject, Injectable, signal } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { EditableMember, Member, Message, Photo } from '../../types/member';
 import { Observable, tap } from 'rxjs';
-import { AccountService } from './account-service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MemberService {
   private http = inject(HttpClient);
-  private accountService = inject(AccountService);
   private baseUrl = environment.apiUrl;
   editMode = signal<boolean>(false);
   member = signal<Member | null>(null);
