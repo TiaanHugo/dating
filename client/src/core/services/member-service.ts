@@ -10,7 +10,7 @@ import { Observable, tap } from 'rxjs';
 export class MemberService {
   private http = inject(HttpClient);
   private baseUrl = environment.apiUrl;
-  editMode = signal<boolean>(false);
+  editMode = signal<boolean>(true);
   member = signal<Member | null>(null);
 
   getMembers() {
@@ -35,5 +35,11 @@ export class MemberService {
 
   getMessages(id: string) {
     return this.http.get<Message[]>(this.baseUrl + 'messages/' + id);
+  }
+
+  uploadPhoto(file: File) {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.http.post<Photo>(this.baseUrl + 'members/add-photo', formData);
   }
 }
