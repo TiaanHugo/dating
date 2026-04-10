@@ -95,11 +95,16 @@ namespace API.Controllers
         [HttpPut("set-main-photo/{photoId}")]
         public async Task<ActionResult> SetMainPhoto(int photoId)
         {
-            var member = await memberRepository.GetMemberForUpdateAsync(User.GetMemberId()!);
+            var member = await memberRepository.GetMemberForUpdateAsync(User.GetMemberId());
+
             if (member == null) return BadRequest("Member not found");
 
             var photo = member.Photos.SingleOrDefault(p => p.Id == photoId);
-            if (photo == null) return NotFound("Photo not found");
+
+            if (member.ImageUrl == photo?.Url || photo == null)
+            {
+                return BadRequest("Photo not found or already main photo");
+            }
 
             member.ImageUrl = photo.Url;
             member.User.ImageUrl = photo.Url;
@@ -107,6 +112,31 @@ namespace API.Controllers
             if (await memberRepository.SaveAllAsync()) return NoContent();
 
             return BadRequest("Failed to set main photo");
+
+        }
+
+        [HttpDelete("delete-photo/{photoId}")]
+        public async Task<ActionResult> DeletePhoto(int photoId)
+        {
+            var member = await memberRepository.GetMemberForUpdateAsync(User.GetMemberId()!);
+
+            if (member == null) return BadRequest("Member not found");
+
+            var photo = member.Photos.SingleOrDefault(p => p.Id == photoId);
+
+            if (photo == null || photo.Url == member.ImageUrl) return BadRequest("Photo not found or cannot remove main photo");
+
+            if (photo.PublicId != null)
+            {
+                var result = await photoService.DeletePhotoAsync(photo.PublicId);
+                if (result.Error != null) return BadRequest(result.Error.Message);
+            }
+
+            member.Photos.Remove(photo);
+
+            if (await memberRepository.SaveAllAsync()) return NoContent();
+
+            return BadRequest("Failed to delete photo");
         }
     }
 }

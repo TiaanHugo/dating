@@ -1,11 +1,11 @@
-import { Component, inject, Input, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
+import { RouterLink } from "@angular/router";
 import { Register } from "../account/register/register";
-import { User } from '../../types/user';
 import { AccountService } from '../../core/services/account-service';
 
 @Component({
   selector: 'app-home',
-  imports: [Register],
+  imports: [Register, RouterLink],
   templateUrl: './home.html',
   styleUrl: './home.css'
 })
