@@ -1,16 +1,14 @@
-import { Component, inject, signal } from '@angular/core';
-import { RouterLink } from "@angular/router";
+import { Component, Input, signal } from '@angular/core';
 import { Register } from "../account/register/register";
-import { AccountService } from '../../core/services/account-service';
+import { User } from '../../types/user';
 
 @Component({
   selector: 'app-home',
-  imports: [Register, RouterLink],
+  imports: [Register],
   templateUrl: './home.html',
   styleUrl: './home.css'
 })
 export class Home {
-  protected accountService = inject(AccountService);
   protected registerMode = signal(false);
 
   showRegister(value: boolean) {
