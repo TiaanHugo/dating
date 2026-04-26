@@ -3,6 +3,7 @@ import { inject, Injectable, signal } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { EditableMember, Member, Message, Photo } from '../../types/member';
 import { Observable, tap } from 'rxjs';
+import { PaginatedResult } from '../../types/pagination';
 
 @Injectable({
   providedIn: 'root'
@@ -13,8 +14,13 @@ export class MemberService {
   editMode = signal<boolean>(false);
   member = signal<Member | null>(null);
 
-  getMembers() {
-    return this.http.get<Member[]>(this.baseUrl + 'members');
+  getMembers(pageNumber = 1, pageSize = 5): Observable<PaginatedResult<Member>> {
+    return this.http.get<PaginatedResult<Member>>(this.baseUrl + 'members', {
+      params: {
+        pageNumber: pageNumber,
+        pageSize: pageSize
+      }
+    });
   }
 
   getMember(id: string): Observable<Member> {

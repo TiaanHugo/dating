@@ -1,6 +1,18 @@
+@if (paginatedMembers$ | async; as paginatedResult) {
+@if (paginatedResult.metaData; as metadata) {
+<app-paginator [pageNumber]="metadata.currentPage"
+               [pageSize]="metadata.pageSize"
+               [totalPages]="metadata.totalPages"
+               [totalCount]="metadata.totalCount"
+               (pageChange)="onPageChange($event)"></app-paginator>
+}
+
+@if (paginatedResult.items; as members) {
 <div class="grid grid-cols-5 gap-6">
-    @for (member of members$ | async; track member.id){
-    <app-member-card [member]="member"></app-member-card>
-    }
+  @for (member of members; track member) {
+  <app-member-card [member]="member"></app-member-card>
+  }
 </div>
+}
+}
 <h3><i>Maak goeie deure oop!</i></h3>
