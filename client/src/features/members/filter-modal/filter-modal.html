@@ -1,0 +1,27 @@
+<dialog #filterModal
+        class="modal">
+    <div class="modal-box">
+        <h3 class="font-bold text-lg">Select Filters</h3>
+
+        <div class="flex justify-between w-full items-center mt-6">
+            <div class="flex flex-col gap-6">
+                <label class="flex justify-between items-center">
+                    <span class="font-semibold">Select gender:</span>
+                    <form class="filter">
+                        <input type="reset" value="x" class="btn btn-square">
+                        <input type="radio" class="btn" ([ngModel])="memberParams.gender" name="gender" value="male">
+                    </form>
+                </label>
+            </div>
+        </div>
+
+        <div class="modal-action">
+            <button (click)="submit()"
+                    class="btn btn-primary">Submit</button>
+        </div>
+    </div>
+    <form method="dialog"
+          class="modal-backdrop">
+        <button (click)="close()">close</button>
+    </form>
+</dialog>

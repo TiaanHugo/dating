@@ -21,11 +21,23 @@ public class MemberRepository(AppDbContext context) : IMemberRepository
         .SingleOrDefaultAsync(x => x.Id == id);
     }
 
-    public async Task<PaginatedResult<Member>> GetMembersAsync(PagingParams pagingParams)
+    public async Task<PaginatedResult<Member>> GetMembersAsync(MemberParams memberParams)
     {
         var query = context.Members.AsQueryable();
-        
-        return await PaginationHelper.CreateAsync(query, pagingParams.PageNumber, pagingParams.PageSize);
+
+        query = query.Where(x => x.Id != memberParams.CurrentMemberId);
+
+        var minDob = DateOnly.FromDateTime(DateTime.Today).AddYears(-memberParams.MaxAge - 1);
+        var maxDob = DateOnly.FromDateTime(DateTime.Today).AddYears(-memberParams.MinAge);
+
+        query = query.Where(x => x.DateOfBirth >= minDob && x.DateOfBirth <= maxDob);
+
+        if (!string.IsNullOrEmpty(memberParams.Gender))
+        {
+            query = query.Where(x => x.Gender == memberParams.Gender);
+        }
+
+        return await PaginationHelper.CreateAsync(query, memberParams.PageNumber, memberParams.PageSize);
     }
 
     public async Task<IReadOnlyList<Photo>> GetPhotosForMemberAsync(string memberId)

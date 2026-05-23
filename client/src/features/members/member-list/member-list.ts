@@ -1,36 +1,55 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit, signal, ViewChild } from '@angular/core';
 import { MemberService } from '../../../core/services/member-service';
-import { Observable } from 'rxjs';
-import { Member } from '../../../types/member';
-import { AsyncPipe } from '@angular/common';
+import { Member, MemberParams } from '../../../types/member';
 import { MemberCard } from '../member-card/member-card';
 import { PaginatedResult } from '../../../types/pagination';
 import { Paginator } from "../../../shared/paginator/paginator";
-import { JsonPipe } from '@angular/common';
+import { FilterModal } from '../filter-modal/filter-modal';
 @Component({
   selector: 'app-member-list',
   standalone: true,
-  imports: [AsyncPipe, MemberCard, Paginator, JsonPipe],
+  imports: [MemberCard, Paginator, FilterModal],
   templateUrl: './member-list.html',
   styleUrl: './member-list.css'
 })
-export class MemberList {
+export class MemberList implements OnInit {
+  @ViewChild('filterModal') modal!: FilterModal;
   private memberService = inject(MemberService);
-  protected paginatedMembers$?: Observable<PaginatedResult<Member>>;
-  pageNumber = 1;
-  pageSize = 5;
+  protected paginatedMembers = signal<PaginatedResult<Member> | null>(null);
+  protected memberParams = new MemberParams();
 
-  constructor() {
+  ngOnInit(): void {
     this.loadMembers();
   }
 
   loadMembers(){
-    this.paginatedMembers$ = this.memberService.getMembers(this.pageNumber, this.pageSize);
+    this.memberService.getMembers(this.memberParams).subscribe({
+      next: members => {
+        this.paginatedMembers.set(members);
+      }
+    });
   }
 
   onPageChange(event: { pageNumber: number, pageSize: number }) { 
-    this.pageNumber = event.pageNumber;
-    this.pageSize = event.pageSize;
+    this.memberParams.pageNumber = event.pageNumber;
+    this.memberParams.pageSize = event.pageSize;
+    this.loadMembers();
+  }
+
+  openModal() {
+    this.modal.open();
+  }
+
+  onClose(){
+    console.log('Modal closed');
+  }
+
+  onFilterChange(data: MemberParams) {
+    console.log('Modal submitted data: ', data);
+  }
+
+  resetFilters() { 
+    this.memberParams = new MemberParams();
     this.loadMembers();
   }
 }
