@@ -29,12 +29,14 @@ export class FilterModal {
   }
 
   onMinAgeChange(){
+    if (this.memberParams.minAge < 18) this.memberParams.minAge = 18;
     if(this.memberParams.minAge > this.memberParams.maxAge){
       this.memberParams.maxAge = this.memberParams.minAge;
     }
   }
 
   onMaxAgeChange(){
+    if(this.memberParams.maxAge < 18) this.memberParams.maxAge = 18;
     if(this.memberParams.maxAge < this.memberParams.minAge){
       this.memberParams.minAge = this.memberParams.maxAge;
     }

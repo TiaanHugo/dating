@@ -6,6 +6,9 @@
               class="btn btn-primary">Select Filters</button>
       <button (click)="resetFilters()"
               class="btn btn-neutral">Reset Filters</button>
+              <div class="text-lg bg-base-100 py-2 px-4 border-1 rounded-lg text-primary capitalize">
+                {{displayMessage}}
+              </div>
     </div>
     @if (paginatedResult.metaData; as metadata) {
     <app-paginator [pageNumber]="metadata.currentPage"
@@ -28,6 +31,6 @@
 
 <app-filter-modal #filterModal 
 [hidden]="!paginatedMembers()"
-                  (onClose)="onClose()"
+                  (closeModal)="onClose()"
                   (submitData)="onFilterChange($event)"></app-filter-modal>
 <h3><i>Maak goeie deure oop!</i></h3>

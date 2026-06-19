@@ -20,11 +20,11 @@ export class MemberService {
     params = params.append('pageSize', memberParams.pageSize.toString());
     params = params.append('minAge', memberParams.minAge.toString());
     params = params.append('maxAge', memberParams.maxAge.toString());
-
-    if(memberParams.gender) {
+    params = params.append('orderBy', memberParams.orderBy);
+    if (memberParams.gender) {
       params = params.append('gender', memberParams.gender);
     }
-    return this.http.get<PaginatedResult<Member>>(this.baseUrl + 'members', {params});
+    return this.http.get<PaginatedResult<Member>>(this.baseUrl + 'members', { params });
   }
 
   getMember(id: string): Observable<Member> {

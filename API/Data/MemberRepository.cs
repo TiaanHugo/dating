@@ -32,6 +32,12 @@ public class MemberRepository(AppDbContext context) : IMemberRepository
 
         query = query.Where(x => x.DateOfBirth >= minDob && x.DateOfBirth <= maxDob);
 
+        query = memberParams.OrderBy switch
+        {
+            "created" => query.OrderByDescending(x => x.Created),
+            _ => query.OrderByDescending(x => x.LastActive)
+        };
+
         if (!string.IsNullOrEmpty(memberParams.Gender))
         {
             query = query.Where(x => x.Gender == memberParams.Gender);

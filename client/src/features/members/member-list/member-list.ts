@@ -45,11 +45,35 @@ export class MemberList implements OnInit {
   }
 
   onFilterChange(data: MemberParams) {
-    console.log('Modal submitted data: ', data);
+    // this.memberParams = Object.assign(new MemberParams(), data);
+    this.memberParams = data;
+    this.loadMembers();
   }
 
   resetFilters() { 
     this.memberParams = new MemberParams();
     this.loadMembers();
   }
+  
+  get displayMessage(): string {
+    const defaultParams = new MemberParams();
+
+    const filters: string[] = [];
+
+    if (this.memberParams.gender){
+      filters.push(this.memberParams.gender + 's');
+    }
+    else {
+      filters.push('Males, Females');
+    }
+
+    if (this.memberParams.minAge !== defaultParams.minAge || this.memberParams.maxAge !== defaultParams.maxAge) {
+      filters.push(`Ages ${this.memberParams.minAge} - ${this.memberParams.maxAge}`);
+    }
+
+    filters.push(this.memberParams.orderBy === 'lastActive' ? 'Recently active' : 'Newest members');
+
+    return filters.length > 0 ? `Selected: ${filters.join(' | ')}` : 'All members';
+  }
+
 }

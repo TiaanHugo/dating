@@ -1,27 +1,109 @@
-<dialog #filterModal
-        class="modal">
-    <div class="modal-box">
-        <h3 class="font-bold text-lg">Select Filters</h3>
+<dialog #filterModal class="modal">
+    <div class="modal-box max-w-lg">
+        
+        <h3 class="text-lg font-bold">
+            Select Filters
+        </h3>
 
-        <div class="flex justify-between w-full items-center mt-6">
-            <div class="flex flex-col gap-6">
-                <label class="flex justify-between items-center">
-                    <span class="font-semibold">Select gender:</span>
-                    <form class="filter">
-                        <input type="reset" value="x" class="btn btn-square">
-                        <input type="radio" class="btn" ([ngModel])="memberParams.gender" name="gender" value="male">
-                    </form>
-                </label>
+        <div class="flex flex-col gap-6 mt-6">
+
+            <!-- Gender -->
+            <div class="flex items-center justify-between">
+                
+                <span class="font-semibold">
+                    Gender
+                </span>
+
+                <div class="flex items-center gap-2">
+
+                    <button
+                        type="button"
+                        class="btn btn-square"
+                        (click)="memberParams.gender = ''">
+                        ×
+                    </button>
+
+                    <input
+                        type="radio"
+                        class="btn"
+                        [(ngModel)]="memberParams.gender"
+                        name="gender"
+                        value="male"
+                        aria-label="Male">
+
+                    <input
+                        type="radio"
+                        class="btn"
+                        [(ngModel)]="memberParams.gender"
+                        name="gender"
+                        value="female"
+                        aria-label="Female">
+                </div>
             </div>
+            <label class="flex justify-between items-center">
+                <span class="font-semibold">Order By: </span>
+                <select name="orderBy" class="select" [(ngModel)]="memberParams.orderBy">
+                    <option disabled value="">Select an option</option>
+                    <option value="lastActive">Last Active</option>
+                    <option value="created">Created</option>
+                </select>
+            </label>
+
+            <!-- Age -->
+            <div class="flex items-center justify-between">
+
+                <span class="font-semibold">
+                    Age Range
+                </span>
+
+                <div class="flex items-center gap-3">
+
+                    <input
+                        type="number"
+                        class="input input-bordered w-20"
+                        min="18"
+                        [(ngModel)]="memberParams.minAge"
+                        (change)="onMinAgeChange()">
+
+                    <span class="text-sm opacity-70">
+                        to
+                    </span>
+
+                    <input
+                        type="number"
+                        class="input input-bordered w-20"
+                        [min]="memberParams.minAge || 18"
+                        [(ngModel)]="memberParams.maxAge"
+                        (change)="onMaxAgeChange()">
+
+                </div>
+            </div>
+
         </div>
 
+        <!-- Actions -->
         <div class="modal-action">
-            <button (click)="submit()"
-                    class="btn btn-primary">Submit</button>
+
+            <button
+                type="button"
+                class="btn"
+                (click)="close()">
+                Cancel
+            </button>
+
+            <button
+                type="button"
+                class="btn btn-primary"
+                (click)="submit()">
+                Apply Filters
+            </button>
+
         </div>
     </div>
-    <form method="dialog"
-          class="modal-backdrop">
-        <button (click)="close()">close</button>
+
+    <form method="dialog" class="modal-backdrop">
+        <button type="button" (click)="close()">
+            close
+        </button>
     </form>
 </dialog>
