@@ -6,7 +6,7 @@
     </div>
     <div>
         <span class="font-semibold">Last Active: </span>
-        <span>{{member.lastActive | date: 'longDate'}}</span>
+        <span>{{member.lastActive | timeago}}</span>
     </div>
     <h3 class="text-lg font-semibold text-primary">About {{member.displayName}}</h3>
     @if (memberService.editMode()){

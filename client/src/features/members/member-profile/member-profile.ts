@@ -7,17 +7,17 @@ import {
   ViewChild,
 } from '@angular/core';
 import { DatePipe } from '@angular/common';
-import { FormsModule, NgForm, NgModel } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 import { MemberService } from '../../../core/services/member-service';
-import { ActivatedRoute } from '@angular/router';
 import { EditableMember, Member } from '../../../types/member';
 import { ToastService } from '../../../core/services/toast-service';
 import { AccountService } from '../../../core/services/account-service';
+import { TimeAgoPipe } from '../../../pipes/timeago-pipe';
 
 @Component({
   selector: 'app-member-profile',
   standalone: true,
-  imports: [DatePipe, FormsModule],
+  imports: [DatePipe, FormsModule, TimeAgoPipe],
   templateUrl: './member-profile.html',
   styleUrl: './member-profile.css'
 })
