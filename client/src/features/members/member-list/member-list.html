@@ -1,36 +1,71 @@
 @if (paginatedMembers(); as paginatedResult) {
-<div class="flex flex-col w-full">
-  <div class="flex justify-between items-center">
-    <div class="flex gap-3">
-      <button (click)="openModal()"
-              class="btn btn-primary">Select Filters</button>
-      <button (click)="resetFilters()"
-              class="btn btn-neutral">Reset Filters</button>
-              <div class="text-lg bg-base-100 py-2 px-4 border-1 rounded-lg text-primary capitalize">
-                {{displayMessage}}
-              </div>
-    </div>
-    @if (paginatedResult.metaData; as metadata) {
-    <app-paginator [pageNumber]="metadata.currentPage"
-                   [pageSize]="metadata.pageSize"
-                   [totalPages]="metadata.totalPages"
-                   [totalCount]="metadata.totalCount"
-                   (pageChange)="onPageChange($event)"></app-paginator>
-    }
-  </div>
 
-  @if (paginatedResult.items; as members) {
-  <div class="grid grid-cols-5 gap-6">
-    @for (member of members; track member.id) {
-    <app-member-card [member]="member"></app-member-card>
-    }
+  <div class="flex flex-col w-full">
+
+    <div class="flex justify-between items-center">
+
+      <div class="flex gap-3 items-center">
+
+        <button
+          type="button"
+          (click)="openModal()"
+          class="btn btn-primary">
+          Select Filters
+        </button>
+
+        <button
+          type="button"
+          (click)="resetFilters()"
+          class="btn btn-neutral">
+          Reset Filters
+        </button>
+
+        <div
+          class="text-lg bg-base-100 py-2 px-4 border rounded-lg text-primary capitalize">
+          {{ displayMessage }}
+        </div>
+
+      </div>
+
+      @if (paginatedResult.metaData; as metadata) {
+
+        <app-paginator
+          [pageNumber]="metadata.currentPage"
+          [pageSize]="metadata.pageSize"
+          [totalPages]="metadata.totalPages"
+          [totalCount]="metadata.totalCount"
+          (pageChange)="onPageChange($event)">
+        </app-paginator>
+
+      }
+
+    </div>
+
+    <div class="grid grid-cols-5 gap-6">
+
+      @for (
+        member of paginatedResult.items;
+        track member.id
+      ) {
+
+        <app-member-card
+          [member]="member">
+        </app-member-card>
+
+      }
+
+    </div>
+
   </div>
-  }
-</div>
 }
 
-<app-filter-modal #filterModal 
-[hidden]="!paginatedMembers()"
-                  (closeModal)="onClose()"
-                  (submitData)="onFilterChange($event)"></app-filter-modal>
-<h3><i>Maak goeie deure oop!</i></h3>
+<app-filter-modal
+  #filterModal
+  [memberParams]="memberParams"
+  (closeModal)="onClose()"
+  (submitData)="onFilterChange($event)">
+</app-filter-modal>
+
+<p class="text-center italic mt-6">
+  Maak goeie deure oop!
+</p>
