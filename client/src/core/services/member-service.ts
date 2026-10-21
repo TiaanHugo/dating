@@ -8,7 +8,7 @@ import {
   Message,
   Photo
 } from '../../types/member';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { PaginatedResult } from '../../types/pagination';
 
 @Injectable({
@@ -42,6 +42,8 @@ export class MemberService {
   getMember(id: string): Observable<Member> {
     return this.http.get<Member>(
       this.baseUrl + 'members/' + id
+    ).pipe(
+      tap(member => this.member.set(member))
     );
   }
 
