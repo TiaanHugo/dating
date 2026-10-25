@@ -1,4 +1,4 @@
-import { Location } from '@angular/common';
+import { Router } from '@angular/router';
 import { Component, inject } from '@angular/core';
 
 @Component({
@@ -8,9 +8,9 @@ import { Component, inject } from '@angular/core';
   styleUrl: './not-found.css'
 })
 export class NotFound {
-  private location = inject(Location);
+  private router = inject(Router);
 
   goBack() {
-    this.location.back();
+    this.router.navigateByUrl('/');
   }
 }
