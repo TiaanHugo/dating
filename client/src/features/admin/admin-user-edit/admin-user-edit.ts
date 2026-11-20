@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { AdminService } from '../../../core/services/admin-service';
@@ -17,6 +17,7 @@ export class AdminUserEdit implements OnInit {
   private adminService = inject(AdminService);
   private toast = inject(ToastService);
   protected update: AdminUpdateUser = {};
+  protected updateLoaded = signal(false);
   protected userId = '';
 
   ngOnInit(): void {
@@ -31,6 +32,7 @@ export class AdminUserEdit implements OnInit {
         country: user.country,
         password: ''
       };
+      this.updateLoaded.set(true);
     });
   }
 

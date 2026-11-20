@@ -58,6 +58,7 @@ export class Nav implements OnInit {
 
 
   logout() {
+    this.adminService.revokeAuthentication();
     this.accountService.logout();
     this.router.navigateByUrl('/');
   }
@@ -68,16 +69,23 @@ export class Nav implements OnInit {
     this.adminModal?.nativeElement.showModal();
   }
 
-  closeAdminModal(): void {
+  closeAdminModal(preserveAuthentication = false): void {
+    if (!preserveAuthentication) this.adminService.revokeAuthentication();
     this.adminModal?.nativeElement.close();
   }
 
   submitAdminPassword(): void {
     this.adminError = '';
-    this.adminService.authenticate(this.adminPassword).subscribe({
+    const password = this.adminPassword.trim();
+    if (!password) {
+      this.adminError = 'Enter the admin password.';
+      return;
+    }
+
+    this.adminService.authenticate(password).subscribe({
       next: () => {
-        this.closeAdminModal();
         this.router.navigateByUrl('/admin/users');
+        this.closeAdminModal(true);
       },
       error: error => {
         this.adminError = error.status === 401

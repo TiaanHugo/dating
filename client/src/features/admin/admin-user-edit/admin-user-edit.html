@@ -1,6 +1,7 @@
 <div class="card bg-base-100 shadow-xl p-6 max-w-2xl">
   <a routerLink="/admin/users" class="link link-primary mb-4">← Back to users</a>
   <h1 class="text-3xl font-bold mb-6">Modify User</h1>
+  @if (updateLoaded()) {
   <form (ngSubmit)="updateUser()" class="grid gap-4">
     <label class="floating-label">
       <span>Email</span>
@@ -34,4 +35,7 @@
     </label>
     <button type="submit" class="btn btn-primary mt-2">Update</button>
   </form>
+  } @else {
+    <span class="loading loading-spinner loading-lg"></span>
+  }
 </div>

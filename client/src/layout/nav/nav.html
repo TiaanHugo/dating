@@ -111,7 +111,8 @@
                    type="password"
                    class="input w-full"
                    [(ngModel)]="adminPassword"
-                   autocomplete="off">
+                   autocomplete="off"
+                   required>
             @if (adminError) {
             <p class="text-error mt-2">{{adminError}}</p>
             }

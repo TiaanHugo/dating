@@ -1,5 +1,5 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { tap } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { AdminUpdateUser, AdminUser } from '../../types/member';
@@ -11,11 +11,20 @@ export class AdminService {
   private http = inject(HttpClient);
   private baseUrl = environment.apiUrl + 'admin/';
   private password = '';
+  authenticated = signal(false);
 
   authenticate(password: string) {
     return this.http.get<AdminUser[]>(this.baseUrl + 'users', {
       headers: this.headers(password)
-    }).pipe(tap(() => this.password = password));
+    }).pipe(tap(() => {
+      this.password = password;
+      this.authenticated.set(true);
+    }));
+  }
+
+  revokeAuthentication(): void {
+    this.password = '';
+    this.authenticated.set(false);
   }
 
   getUsers() {
