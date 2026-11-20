@@ -13,6 +13,8 @@ import { MemberPhotos } from '../features/members/member-photos/member-photos';
 import { MemberMessages } from '../features/members/member-messages/member-messages';
 import { memberResolver } from '../features/members/member-resolver';
 import { preventUnsavedChangesGuard } from '../core/guards/prevent-unsaved-changes-guard';
+import { AdminUsers } from '../features/admin/admin-users/admin-users';
+import { AdminUserEdit } from '../features/admin/admin-user-edit/admin-user-edit';
 
 export const routes: Routes = [
     { path: '', component: Home },
@@ -38,6 +40,8 @@ export const routes: Routes = [
             { path: 'messages', component: Messages },
         ]
     },
+    { path: 'admin/users', component: AdminUsers, title: 'Admin Portal' },
+    { path: 'admin/users/:id', component: AdminUserEdit, title: 'Modify User' },
     { path: 'errors', component: TestErrors },
     { path: 'server-error', component: ServerError },
     { path: '**', component: NotFound },

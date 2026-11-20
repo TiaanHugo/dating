@@ -28,6 +28,7 @@
             <a routerLink="/messages"
                routerLinkActive="text-accent">Messages</a>
             }
+            <a (click)="openAdminModal()">Admin portal</a>
             <a routerLink="/errors"
                routerLinkActive="text-accent">Errors</a>
         </nav>
@@ -100,3 +101,27 @@
         </div>
     </div>
 </header>
+
+<dialog #adminModal class="modal">
+    <div class="modal-box">
+        <h3 class="text-lg font-bold">Admin Portal</h3>
+        <p class="py-2">Enter the admin password</p>
+        <form (ngSubmit)="submitAdminPassword()">
+            <input name="adminPassword"
+                   type="password"
+                   class="input w-full"
+                   [(ngModel)]="adminPassword"
+                   autocomplete="off">
+            @if (adminError) {
+            <p class="text-error mt-2">{{adminError}}</p>
+            }
+            <div class="modal-action">
+                <button type="button" class="btn" (click)="closeAdminModal()">Cancel</button>
+                <button type="submit" class="btn btn-primary">Enter</button>
+            </div>
+        </form>
+    </div>
+    <form method="dialog" class="modal-backdrop">
+        <button (click)="closeAdminModal()">close</button>
+    </form>
+</dialog>

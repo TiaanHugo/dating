@@ -1,0 +1,37 @@
+<div class="card bg-base-100 shadow-xl p-6 max-w-2xl">
+  <a routerLink="/admin/users" class="link link-primary mb-4">← Back to users</a>
+  <h1 class="text-3xl font-bold mb-6">Modify User</h1>
+  <form (ngSubmit)="updateUser()" class="grid gap-4">
+    <label class="floating-label">
+      <span>Email</span>
+      <input name="email" type="email" class="input w-full" [(ngModel)]="update.email" required>
+    </label>
+    <label class="floating-label">
+      <span>Display Name</span>
+      <input name="displayName" class="input w-full" [(ngModel)]="update.displayName" required>
+    </label>
+    <label class="floating-label">
+      <span>Description</span>
+      <textarea name="description" class="textarea w-full" [(ngModel)]="update.description"></textarea>
+    </label>
+    <label class="floating-label">
+      <span>Gender</span>
+      <input name="gender" class="input w-full" [(ngModel)]="update.gender">
+    </label>
+    <div class="grid grid-cols-2 gap-4">
+      <label class="floating-label">
+        <span>City</span>
+        <input name="city" class="input w-full" [(ngModel)]="update.city">
+      </label>
+      <label class="floating-label">
+        <span>Country</span>
+        <input name="country" class="input w-full" [(ngModel)]="update.country">
+      </label>
+    </div>
+    <label class="floating-label">
+      <span>New Password (leave blank to keep current)</span>
+      <input name="password" type="password" minlength="4" class="input w-full" [(ngModel)]="update.password">
+    </label>
+    <button type="submit" class="btn btn-primary mt-2">Update</button>
+  </form>
+</div>

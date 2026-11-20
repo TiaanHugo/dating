@@ -1,0 +1,17 @@
+<div class="card bg-base-100 shadow-xl p-6">
+  <h1 class="text-3xl font-bold mb-6">Admin Portal - Users</h1>
+  <div class="grid gap-3">
+    @for (user of users(); track user.id) {
+      <a [routerLink]="['/admin/users', user.id]"
+         class="flex items-center gap-4 p-4 border rounded-lg hover:bg-base-200 cursor-pointer">
+        <img [src]="user.imageUrl || '/user.png'" [alt]="user.displayName" class="w-12 h-12 rounded-full">
+        <div>
+          <div class="font-semibold">{{ user.displayName }}</div>
+          <div class="text-sm opacity-70">{{ user.email }}</div>
+        </div>
+      </a>
+    } @empty {
+      <p class="opacity-70">No users found.</p>
+    }
+  </div>
+</div>

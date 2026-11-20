@@ -15,7 +15,7 @@ namespace API.Data.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "9.0.9");
+            modelBuilder.HasAnnotation("ProductVersion", "9.0.21");
 
             modelBuilder.Entity("API.Entities.AppUser", b =>
                 {
@@ -43,7 +43,7 @@ namespace API.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("API.Entities.Member", b =>
@@ -84,7 +84,22 @@ namespace API.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Members", (string)null);
+                    b.ToTable("Members");
+                });
+
+            modelBuilder.Entity("API.Entities.MemberLike", b =>
+                {
+                    b.Property<string>("SourceMemberId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("TargetMemberId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("SourceMemberId", "TargetMemberId");
+
+                    b.HasIndex("TargetMemberId");
+
+                    b.ToTable("Likes");
                 });
 
             modelBuilder.Entity("API.Entities.Message", b =>
@@ -115,7 +130,7 @@ namespace API.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Messages", (string)null);
+                    b.ToTable("Messages");
                 });
 
             modelBuilder.Entity("API.Entities.Photo", b =>
@@ -139,7 +154,7 @@ namespace API.Data.Migrations
 
                     b.HasIndex("MemberId");
 
-                    b.ToTable("Photos", (string)null);
+                    b.ToTable("Photos");
                 });
 
             modelBuilder.Entity("API.Entities.Member", b =>
@@ -151,6 +166,25 @@ namespace API.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("API.Entities.MemberLike", b =>
+                {
+                    b.HasOne("API.Entities.Member", "SourceMember")
+                        .WithMany("LikedMembers")
+                        .HasForeignKey("SourceMemberId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("API.Entities.Member", "TargetMember")
+                        .WithMany("LikedByMembers")
+                        .HasForeignKey("TargetMemberId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("SourceMember");
+
+                    b.Navigation("TargetMember");
                 });
 
             modelBuilder.Entity("API.Entities.Photo", b =>
@@ -172,6 +206,10 @@ namespace API.Data.Migrations
 
             modelBuilder.Entity("API.Entities.Member", b =>
                 {
+                    b.Navigation("LikedByMembers");
+
+                    b.Navigation("LikedMembers");
+
                     b.Navigation("Photos");
                 });
 #pragma warning restore 612, 618

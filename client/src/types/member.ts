@@ -34,6 +34,27 @@ export type EditableMember = {
     description?: string
 }
 
+export type AdminUser = {
+    id: string
+    email: string
+    displayName: string
+    imageUrl?: string
+    description?: string
+    gender: string
+    city: string
+    country: string
+}
+
+export type AdminUpdateUser = {
+    email?: string
+    displayName?: string
+    description?: string
+    gender?: string
+    city?: string
+    country?: string
+    password?: string
+}
+
 export class MemberParams {
     gender?: string;
     minAge = 18;

@@ -19,6 +19,16 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
         modelBuilder.Entity<MemberLike>()
             .HasKey(k => new { k.SourceMemberId, k.TargetMemberId });
 
+        modelBuilder.Entity<MemberLike>()
+            .HasOne(x => x.SourceMember)
+            .WithMany(x => x.LikedMembers)
+            .HasForeignKey(x => x.SourceMemberId);
+
+        modelBuilder.Entity<MemberLike>()
+            .HasOne(x => x.TargetMember)
+            .WithMany(x => x.LikedByMembers)
+            .HasForeignKey(x => x.TargetMemberId);
+
         var dateTimeConverter = new ValueConverter<DateTime, DateTime>(
             v => v.ToUniversalTime(),
             v => DateTime.SpecifyKind(v, DateTimeKind.Utc)
